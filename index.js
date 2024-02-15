@@ -15,8 +15,6 @@ import postRoutes from "./routes/posts.js";
 import { varifyToken } from "./middleware/auth.js";
 import { createPost } from "./controllers/posts.js";
 
-import path from "path"; // for deployment only
-
 
 /* Configuration */
 const __filename = fileURLToPath(import.meta.url);
@@ -24,7 +22,7 @@ const __direname = path.dirname(__filename);
 dotenv.config(); //now we can access through process
 const app = express(); //create the express app - the main bacekend app
 //configing middlewares
-app.use(express.static(path.join(__direname, './client/build/'))) // for development only
+app.use(express.static(path.join(__direname, './client/build'))) // for deployment only
 app.use(express.json()); //so that we can process json coming in web requests
 app.use(helmet.crossOriginResourcePolicy({policy: 'cross-origin'}));
 app.use(morgan("common"));
@@ -68,7 +66,7 @@ app.use("/posts", postRoutes);
 
 // for deployment only
 app.use('*', function(req, res) {
-    res.sendFile(path.join(__dirname, './client/build/index.html'));
+    res.sendFile(path.join(__direname, './client/build/index.html'));
 });
 
 
@@ -83,7 +81,7 @@ mongoose.connect(process.env.MONGO_URI, {
         console.log("Listening on port: " + port);
     })
 }).catch((err)=> {
-    console.log("Coudn't connect to DB !" + err);
+    console.log("Couldn't connect to DB !" + err);
 })
 
 
